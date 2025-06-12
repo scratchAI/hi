@@ -1,0 +1,9 @@
+{
+  "name": "sb3-converter",
+  "version": "1.0.0",
+  "description": "Convert Scratch sb3 files to standalone HTML",
+  "type": "module",
+  "dependencies": {
+    "@turbowarp/packager": "^3.5.0"
+  }
+}
