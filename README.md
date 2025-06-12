@@ -29,3 +29,12 @@ directory.
 
 The produced HTML file contains everything needed to run the project offline in
 a browser.
+
+## Deploying to GitHub Pages
+
+This repository includes a GitHub Actions workflow that can automatically build
+`project.sb3` into an HTML file and publish it to the `gh-pages` branch. Simply
+commit a Scratch project named `project.sb3` to the root of the repository and
+push to `main`. The workflow will create `dist/index.html` and deploy it to
+GitHub Pages so you can access the project at
+`https://<your-username>.github.io/<repository-name>/`.

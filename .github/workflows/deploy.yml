@@ -1,0 +1,33 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.sb3'
+      - sb3_to_html.js
+      - package.json
+      - package-lock.json
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm ci
+      - name: Convert sb3 to HTML
+        run: |
+          mkdir -p dist
+          if [ -f project.sb3 ]; then
+            node sb3_to_html.js project.sb3 dist/index.html
+          else
+            echo "No project.sb3 found; skipping conversion" && exit 0
+          fi
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
