@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Typing Game</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background: #f0f0f0;
+}
+#gameArea {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    background: #fff;
+    border: 1px solid #ccc;
+    overflow: hidden;
+}
+.word {
+    position: absolute;
+    font-size: 24px;
+    color: #333;
+    white-space: nowrap;
+}
+#inputArea {
+    width: 100%;
+    height: 20vh;
+    text-align: center;
+    padding-top: 20px;
+    box-sizing: border-box;
+}
+#userInput {
+    font-size: 24px;
+    padding: 10px;
+}
+#score {
+    font-size: 20px;
+    margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div id="gameArea"></div>
+<div id="inputArea">
+    <input id="userInput" type="text" autocomplete="off" />
+    <div id="score">Score: 0</div>
+</div>
+<script>
+const words = [
+    'apple', 'banana', 'orange', 'grape', 'melon', 'peach', 'cherry',
+    'mango', 'pear', 'lemon', 'lime', 'kiwi', 'plum', 'berry', 'fig'
+];
+const gameArea = document.getElementById('gameArea');
+const input = document.getElementById('userInput');
+const scoreDisplay = document.getElementById('score');
+let activeWords = [];
+let score = 0;
+
+function addWord() {
+    const wordText = words[Math.floor(Math.random() * words.length)];
+    const wordElem = document.createElement('span');
+    wordElem.className = 'word';
+    wordElem.textContent = wordText;
+    wordElem.style.left = Math.floor(Math.random() * (gameArea.clientWidth - 100)) + 'px';
+    wordElem.style.top = '0px';
+    gameArea.appendChild(wordElem);
+
+    const wordObj = { text: wordText, elem: wordElem, top: 0 };
+    activeWords.push(wordObj);
+}
+
+function moveWords() {
+    activeWords.forEach((w, index) => {
+        w.top += 2; // speed
+        w.elem.style.top = w.top + 'px';
+        if (w.top > gameArea.clientHeight) {
+            gameArea.removeChild(w.elem);
+            activeWords.splice(index, 1);
+        }
+    });
+}
+
+function checkInput() {
+    const value = input.value.trim();
+    if (!value) return;
+    const matchIndex = activeWords.findIndex(w => w.text === value);
+    if (matchIndex !== -1) {
+        const matched = activeWords[matchIndex];
+        gameArea.removeChild(matched.elem);
+        activeWords.splice(matchIndex, 1);
+        score++;
+        scoreDisplay.textContent = 'Score: ' + score;
+    }
+    input.value = '';
+}
+
+input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        checkInput();
+    }
+});
+
+setInterval(addWord, 2000); // add new word every 2s
+setInterval(moveWords, 50); // update positions
+</script>
+</body>
+</html>
